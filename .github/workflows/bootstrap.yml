@@ -1,1 +1,25 @@
+name: Bootstrap from heyj
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch process-guide-split from heyj
+        run: |
+          git clone --branch process-guide-split --single-branch --depth 50 \
+            <https://github.com/jjh03282-source/heyj.git> src
+
+      - name: Force-push to this repo's main
+        working-directory: src
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin \
+            https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          git push --force origin HEAD:main
 
